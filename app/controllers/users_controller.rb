@@ -21,16 +21,6 @@ class UsersController < ApplicationController
   def create
     user = UserService.new.create_user(user_params)
     if user
-
-      phone = PhoneService.new.create_phone(user_params[:phone], user.id)
-      address = AddressService.new.create_address(user_params[:addresses], user.id)
-
-      if phone && address
-        user.phone << phone
-        user.addresses << address
-      else
-        render json: { error: 'Erro ao salvar telefone ou endereço' }, status: :unprocessable_entity and return
-      end
       render json: user, status: :created
     else
       render json: user.errors, status: :unprocessable_entity
@@ -38,7 +28,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = UserService.new.update_user(params[:id], params: user_params)
+    user = UserService.new.update_user(params[:id], user_params)
     if user
       render json: user, status: :ok
     else
@@ -47,8 +37,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    UserService.new.delete_user(params[:id])
-    head :no_content
+    render json: UserService.new.delete_user(params[:id])
   end
 
   private
@@ -64,12 +53,12 @@ class UsersController < ApplicationController
         :street, 
         :city, 
         :state, 
-        :cep
+        :cep 
       ],
-      phone: {
+      phone: [
         :ddd, 
         :number
-      }
+      ]
     )
   end
 end
