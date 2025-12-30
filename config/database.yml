@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: 127.0.0.1
+  port: 5432
+  username: postgres
+  password: "!Bruno1234"
+  pool: 5
+
+development:
+  <<: *default
+  database: book_store_development
+
+test:
+  <<: *default
+  database: book_store_test

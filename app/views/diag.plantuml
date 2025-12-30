@@ -1,0 +1,74 @@
+@startuml
+left to right direction
+
+abstract class Pessoa{
+    + nome: string
+    + email: string
+}
+
+class Telefone {
+    + ddd: string
+    + numero: string
+}
+
+class Endereco {
+    + rua: string
+    + cidade: string
+    + estado: string
+    + cep: string
+}
+
+class Usuario {
+    + senha: string
+}
+
+enum RoleUsuario {
+    ADMIN
+    CLIENTE
+}
+
+class Autor{
+    + biografia: string
+}
+
+class Livro {
+    + titulo: string
+    + preco: decimal
+    + estoque: integer
+    + disponivel: boolean
+}
+
+class Pedido {
+    + preco: decimal
+    + data: datetime
+}
+
+class ItemPedido {
+    + quantidade: integer
+}
+
+enum StatusPedido {
+    PROCESSANDO
+    ENVIADO
+    ENTREGUE
+    CANCELADO
+}
+
+Usuario <|-- Pessoa
+Autor <|-- Pessoa
+
+Pessoa "1" --> "*" Endereco : possui
+Pessoa "1" --> "1" Telefone : possui
+
+Usuario "1" --> "*" Pedido : realizar
+Usuario "1" --> "1" RoleUsuario : tem papel
+
+ItemPedido "1" --> "1" Livro : referencia
+ItemPedido "*" --> "1" Pedido : pertencem a
+
+Pedido "1" --> "1" StatusPedido : está em
+Pedido "*" --> "1" Endereco : contém
+
+Autor "1" --> "*" Livro : escreve
+
+@enduml
