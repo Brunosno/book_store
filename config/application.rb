@@ -15,5 +15,6 @@ module BookStore
     config.load_defaults 8.0
 
     config.api_only = true
+
   end
 end
