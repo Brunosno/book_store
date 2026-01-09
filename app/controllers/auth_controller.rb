@@ -2,7 +2,7 @@ class AuthController < ApplicationController
     skip_before_action :authenticate_request, only: [:login, :register]
 
     def login
-        user = AuthService.new.authenticate(auth_params[:username], auth_params[:password])
+        user = AuthService.new.authenticate(auth_params[:email], auth_params[:password])
         if user
           render json: user, status: :ok
         else

@@ -3,11 +3,8 @@ class AuthorsController < ApplicationController
 
   def index
     authors = AuthorService.new.find_all_authors
-    if authors.any?
-      render json: authors, status: :ok
-    else
-      render json: { error: 'Nenhum registro encontrado' }, status: :not_found
-    end
+
+    render json: authors, status: :ok
   end
 
   def show

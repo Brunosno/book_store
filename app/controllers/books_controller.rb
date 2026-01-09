@@ -2,20 +2,20 @@ class BooksController < ApplicationController
   skip_before_action :authenticate_request, only: [:index]
 
   def index
-    render json: Book.all, status: :ok
+    render json: BookService.new.find_all_books, status: :ok
   end
 
   def show
-    book = Book.find_by(id: params[:id])
+    book = BookService.new.find_book_by_id(params[:id])
     return render_not_found unless book
 
     render json: book, status: :ok
   end
 
   def create
-    book = Book.new(book_params)
+    book = BookService.new.create_book(book_params)
 
-    if book.save
+    if book
       render json: book, status: :created
     else
       render json: { errors: book.errors.full_messages }, status: :unprocessable_entity
@@ -23,21 +23,20 @@ class BooksController < ApplicationController
   end
 
   def update
-    book = Book.find_by(id: params[:id])
+    book = BookService.new.update_book(params[:id], book_params)
     return render_not_found unless book
 
-    if book.update(book_params)
-      render json: book, status: :ok
+    render json: book, status: :ok
     else
       render json: { errors: book.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    book = Book.find_by(id: params[:id])
+    book = BookService.new.find_book_by_id(params[:id])
     return render_not_found unless book
 
-    book.destroy
+    BookService.new.delete_book(params[:id])
     head :no_content
   end
 
@@ -45,7 +44,7 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(
-      :title, 
+      :title,
       :price, 
       :stock, 
       :author_id, 

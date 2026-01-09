@@ -22,11 +22,19 @@ class UserService
     if user.save
 
       if params[:phone].present?
-        PhoneService.new.create_phone(params[:phone], user[:id])
+        phone = PhoneService.new.create_phone(params[:phone], user[:id])
+
+        if phone[:error]
+          raise phone[:error]
+        end
       end
 
       if params[:addresses].present?
-        AddressService.new.create_address(params[:addresses], user[:id])
+        address = AddressService.new.create_address(params[:addresses], user[:id])
+      
+        if address[:error]
+          raise address[:error]
+        end
       end
 
       convert_to_dto_response(user)

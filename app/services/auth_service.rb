@@ -3,13 +3,13 @@ class AuthService
     @user_model = user_model
   end
 
-  def authenticate(username, password)
-    user = @user_model.find_by(username: username)
+  def authenticate(email, password)
+    user = @user_model.find_by(email: email)
         if user&.authenticate(password)
             token = JsonWebTokenService.encode({user_id: user.id, is_admin: user.is_admin})
             return {id: user.id, username: user.username, is_admin: user.is_admin, token: token}
         else
-            return { error: 'Invalid username or password' }
+            raise StandardError, "Invalid email or password"
         end
   end
 
