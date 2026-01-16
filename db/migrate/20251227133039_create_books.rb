@@ -5,6 +5,7 @@ class CreateBooks < ActiveRecord::Migration[7.1]
       t.decimal :price, precision: 10, scale: 2, null: false
       t.integer :stock, null: false, default: 0
       t.boolean :available, null: false, default: true
+      t.string :description, null: false
 
       t.references :author, null: false, foreign_key: { to_table: :persons }
 

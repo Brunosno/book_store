@@ -22,6 +22,8 @@ gem "bcrypt", "~> 3.1.7"
 gem "jwt"
 # Handle Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible [https://github.com/cyu/rack-cors]
 gem "rack-cors"
+# Pagination library [https://github.com/kaminari/kaminari]
+gem "kaminari"
 # Manage environment variables [https://github.com/bkeepers/dotenv]
 gem 'dotenv-rails', groups: [:development, :test]
 # Call C code from Ruby [https://ruby-doc.org/stdlib-2.6.1/libdoc/fiddle/rdoc/Fiddle.html]

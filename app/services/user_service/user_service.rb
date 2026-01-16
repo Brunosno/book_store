@@ -22,7 +22,7 @@ class UserService
     if user.save
 
       if params[:phone].present?
-        phone = PhoneService.new.create_phone(params[:phone], user[:id])
+        phone = PhoneService::Create.call(params[:phone], user[:id])
 
         if phone[:error]
           raise phone[:error]
@@ -30,11 +30,13 @@ class UserService
       end
 
       if params[:addresses].present?
-        address = AddressService.new.create_address(params[:addresses], user[:id])
-      
-        if address[:error]
-          raise address[:error]
-        end
+          params[:addresses].for_each do |address_params|
+            address = AddressService::Create.call(address_params, user[:id])
+
+            if address[:error]
+              raise address[:error]
+            end
+          end
       end
 
       convert_to_dto_response(user)
@@ -57,7 +59,7 @@ class UserService
     if !user
       raise ActiveRecord::RecordNotFound, "User not found"
     end
-    
+
     if user.destroy
       { message: "User deleted successfully" }
     else

@@ -1,74 +1,72 @@
 @startuml
 left to right direction
 
-abstract class Pessoa{
-    + nome: string
+abstract class Person{
+    + name: string
     + email: string
 }
 
-class Telefone {
+class Phone {
     + ddd: string
-    + numero: string
+    + number: string
 }
 
-class Endereco {
-    + rua: string
-    + cidade: string
-    + estado: string
-    + cep: string
+class Address {
+    + street: string
+    + city: string
+    + state: string
+    + zipCode: string
 }
 
-class Usuario {
-    + senha: string
+class User {
+    + password: string
 }
 
-enum RoleUsuario {
+enum RoleUser {
     ADMIN
-    CLIENTE
+    CLIENT
 }
 
-class Autor{
-    + biografia: string
+class Author{
+    + biography: string
 }
 
-class Livro {
-    + titulo: string
-    + preco: decimal
-    + estoque: integer
-    + disponivel: boolean
+class Book {
+    + title: string
+    + price: decimal
+    + stock: integer
+    + available: boolean
 }
 
-class Pedido {
-    + preco: decimal
-    + data: datetime
+class Order {
+    + price: decimal
+    + date: datetime
 }
 
-class ItemPedido {
-    + quantidade: integer
+class OrderItem {
+    + quantity: integer
 }
 
-enum StatusPedido {
-    PROCESSANDO
-    ENVIADO
-    ENTREGUE
-    CANCELADO
+enum StatusOrder {
+    PROCESSING
+    SENT
+    DELIVERED
+    CANCELLED
 }
 
-Usuario <|-- Pessoa
-Autor <|-- Pessoa
+User <|-- Person
+Author <|-- Person
 
-Pessoa "1" --> "*" Endereco : possui
-Pessoa "1" --> "1" Telefone : possui
+Person "1" --> "*" Address : possesses
+Person "1" --> "1" Phone : possesses
+User "1" --> "*" Order : places
+User "1" --> "1" RoleUser : has role
 
-Usuario "1" --> "*" Pedido : realizar
-Usuario "1" --> "1" RoleUsuario : tem papel
+OrderItem "1" --> "1" Book : references
+OrderItem "*" --> "1" Order : belongs to
+Order "1" --> "1" StatusOrder : is in
+Order "*" --> "1" Address : contains
 
-ItemPedido "1" --> "1" Livro : referencia
-ItemPedido "*" --> "1" Pedido : pertencem a
-
-Pedido "1" --> "1" StatusPedido : está em
-Pedido "*" --> "1" Endereco : contém
-
-Autor "1" --> "*" Livro : escreve
+Author "1" --> "*" Book : writes
 
 @enduml

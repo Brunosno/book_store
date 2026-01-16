@@ -17,13 +17,7 @@ class PhoneService
   end
 
   def create_phone(params, user_id)
-    phone = @phone_model.new(params.merge(person_id: user_id))
-
-    if phone.save
-      return phone, status: :created
-    else
-      raise ActiveRecord::RecordInvalid.new(phone)
-    end
+    Create.call(params, user_id)
   end
 
   def update_phone(phone_id, params)

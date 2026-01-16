@@ -1,20 +1,25 @@
 Rails.application.routes.draw do
-  resources :authors, only: [:index, :create, :update, :show, :destroy]
-  resources :addresses, only: [:index, :create, :update, :show, :destroy]
-  resources :orders, only: [:index, :create, :update, :show, :destroy]
-  resources :phones, only: [:index, :create, :update, :show, :destroy]
-  resources :books, only: [:index, :create, :update, :show, :destroy]
+  namespace :api do
+    namespace :v1 do
+      # API routes will be defined here
+      resources :authors
+      resources :addresses
+      resources :orders
+      resources :phones
+      resources :books
 
-  resources :users, only: [:index, :create, :update, :show, :destroy] do
-    collection do
-      post :find_user
-    end
-  end
+      resources :users do
+        collection do
+          post :find_user
+        end
+      end
 
-  resources :auth do
-    collection do
-      post :login
-      post :register
+      resources :auth do
+        collection do
+          post :login
+          post :register
+        end
+      end
     end
   end
 end

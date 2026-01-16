@@ -18,7 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_133118) do
     t.string "street", null: false
     t.string "city", null: false
     t.string "state", null: false
-    t.string "cep", null: false
+    t.string "zip_code", null: false
     t.bigint "person_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -30,6 +30,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_133118) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.integer "stock", default: 0, null: false
     t.boolean "available", default: true, null: false
+    t.string "description", null: false
     t.bigint "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -37,13 +38,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_133118) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal "price", precision: 10, scale: 2, null: false
+    t.decimal "total", precision: 10, scale: 2, null: false
     t.datetime "date", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.integer "status_order", default: 0, null: false
-    t.bigint "person_id"
+    t.bigint "user_id", null: false
+    t.bigint "address_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["person_id"], name: "index_orders_on_person_id"
+    t.index ["address_id"], name: "index_orders_on_address_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "persons", force: :cascade do |t|
@@ -69,6 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_133118) do
 
   add_foreign_key "addresses", "persons"
   add_foreign_key "books", "persons", column: "author_id"
-  add_foreign_key "orders", "persons"
+  add_foreign_key "orders", "addresses"
+  add_foreign_key "orders", "persons", column: "user_id"
   add_foreign_key "phones", "persons"
 end
