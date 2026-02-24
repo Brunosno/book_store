@@ -11,7 +11,7 @@ module BookService
     private
 
     def create_book(params)
-        book = @book_model.new(params)
+        book = Book.new(params)
 
         if book.save
             convert_to_dto(book)

@@ -55,6 +55,7 @@ module Api
           email: author.email,
           biography: author.biography
         }
+      end
     end
   end
 end

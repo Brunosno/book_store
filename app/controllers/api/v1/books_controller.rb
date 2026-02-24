@@ -1,7 +1,7 @@
 module Api
   module V1
     class BooksController < ApiController
-      skip_before_action :authenticate_request, only: [:index, :create]
+      skip_before_action :authenticate_request, only: [:index, :create, :update]
 
       def index
         books = Book.all.map { | book | convert_to_dto(book) }
@@ -50,7 +50,8 @@ module Api
           :description,
           :price,
           :stock,
-          :author_id
+          :author_id,
+          :available
         )
       end
 
@@ -58,7 +59,7 @@ module Api
         render json: { error: 'Registro não encontrado' }, status: :not_found
       end
 
-      def convert_to_dto
+      def convert_to_dto(book)
         {
           id: book.id,
           title: book.title,

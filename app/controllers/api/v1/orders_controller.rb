@@ -18,7 +18,7 @@ module Api
       end
 
       def create
-        order = OrderService.new.create_order(order_params)
+        order = OrderService::Create.call(order_params)
         render json: order, status: :created
       end
 

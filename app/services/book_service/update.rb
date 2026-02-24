@@ -16,7 +16,7 @@ module BookService
 
       if book
         book.update(params)
-        convert_to_dto(book)
+        convert_to_dto_response(book)
       else
         raise ActiveRecord::RecordNotFound, "Book with #{book_id} not found"
       end
@@ -33,4 +33,5 @@ module BookService
         available: book.available
       }
     end
+  end
 end
