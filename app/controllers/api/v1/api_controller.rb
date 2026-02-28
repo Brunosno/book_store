@@ -9,12 +9,13 @@ module Api
 
       protected
 
-      def render_success(data: nil, message: nil, status: :ok)
+      def render_success(data: nil, message: nil, status: :ok, meta: nil)
         render json: {
           success: true,
           message: message,
-          data: data
-        }, status: status
+          data: data,
+          meta: meta
+        }.compact, status: status
       end
 
       def render_error(message:, status: :unprocessable_entity, errors: nil)

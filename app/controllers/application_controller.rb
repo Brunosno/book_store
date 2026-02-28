@@ -13,12 +13,14 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     token = extract_token
-    decoded = JsonWebTokenService.decode(token)
+    return render_unauthorized unless token
 
-    return render_unauthorized unless decoded
-
-    @current_user = User.find_by(id: decoded[:user_id])
-    render_unauthorized unless @current_user
+    begin
+      decoded = JsonWebTokenService.decode(token)
+      @current_user = User.find(decoded[:user_id])
+    rescue
+      render_unauthorized
+    end
   end
 
   def extract_token
