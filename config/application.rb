@@ -17,5 +17,6 @@ module BookStore
 
     config.api_only = true
 
+    config.autoload_paths << Rails.root.join("app/errors")
   end
 end

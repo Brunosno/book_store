@@ -1,7 +1,6 @@
 module Api
   module V1
     class PhonesController < ApiController
-      skip_before_action :authenticate_request, only: [:create]
       before_action :authorize_admin!, only: [:index, :show]
 
       def index
@@ -29,7 +28,7 @@ module Api
       end
 
       def create
-        phone = PhoneService::Create.call(phone_params)
+        phone = PhoneService::Create.call(phone_params, current_user.id)
 
         render_success(
           data: phone,
@@ -56,8 +55,7 @@ module Api
       private
 
       def phone_params
-        params.require(:phone)
-              .permit(:ddd, :number, :person_id)
+        params.require(:phone).permit(:ddd, :number)
       end
 
       def pagination_meta(collection)

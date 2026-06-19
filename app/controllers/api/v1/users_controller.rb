@@ -1,8 +1,7 @@
 module Api
   module V1
     class UsersController < ApiController
-      skip_before_action :authenticate_request, only: [:create]
-      before_action :authorize_admin!, only: [:index, :destroy]
+      before_action :authorize_admin!, only: [:index, :show, :create, :destroy]
       before_action :set_user, only: [:show, :update]
 
       def index
@@ -26,20 +25,20 @@ module Api
       end
 
       def create
-        user = UserService::Create.call(user_params_without_admin)
+        user = UserService::Create.call(user_params)
 
         render_success(
-          data: convert_to_dto(user),
+          data: user,
           message: "User created successfully",
           status: :created
         )
       end
 
       def update
-        user = UserService::Update.call(@user.id, user_params_without_admin)
+        user = UserService::Update.call(@user.id)
 
         render_success(
-          data: convert_to_dto(user),
+          data: user,
           message: "User updated successfully"
         )
       end
@@ -68,15 +67,11 @@ module Api
         )
       end
 
-      def user_params_without_admin
-        user_params.except(:is_admin)
-      end
-
       def convert_to_dto(user)
         {
           id: user.id,
-          name: user.name,
           email: user.email,
+          name: user.name,
           username: user.username,
           is_admin: user.is_admin
         }

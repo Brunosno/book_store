@@ -31,7 +31,7 @@ module Api
       end
 
       def create
-        order = OrderService::Create.call(order_params)
+        order = OrderService::Create.call(order_params, current_user.id)
 
         render_success(
           data: order,
@@ -56,6 +56,16 @@ module Api
       end
 
       private
+
+      def order_params
+        params.require(:order).permit(
+          :address_id,
+          order_items_attributes: [
+            :book_id,
+            :quantity
+          ]
+        )
+      end
 
       def pagination_meta(collection)
         {

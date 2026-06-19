@@ -4,21 +4,22 @@ module Api
       skip_before_action :authenticate_request, only: [:login, :register]
 
       def login
-          user = AuthService.new.authenticate(auth_params[:email], auth_params[:password])
-          if user
-            render json: user, status: :ok
-          else
-            render json: { error: 'Credenciais inválidas' }, status: :unauthorized
-          end
+        result = AuthService::Authenticate.call(auth_params[:email], auth_params[:password])
+
+        render_success(
+          data: result,
+          message: "Login realizado com sucesso"
+        )
       end
 
       def register
-          user = AuthService.new.register_user(auth_params)
-          if user
-              render json: user, status: :created
-          else
-              render json: { error: 'Erro ao registrar usuário' }, status: :unprocessable_entity
-          end
+        result = AuthService::Create.call(auth_params)
+
+        render_success(
+          data: result,
+          message: "Usuário registrado com sucesso",
+          status: :created
+        )
       end
 
       private

@@ -2,10 +2,15 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :authors
-      resources :addresses
       resources :orders
       resources :phones
       resources :books
+
+      resources :addresses do
+        collection do
+          get :my_addresses
+        end
+      end
 
       resources :users do
         collection do

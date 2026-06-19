@@ -1,11 +1,13 @@
 module OrderService
   class Create < ApplicationService
-    def initialize(params)
+    def initialize(params, user_id)
       @params = params
+      @user_id = user_id
     end
 
     def call
       order = Order.new(@params)
+      order.user_id = @user_id
 
       ActiveRecord::Base.transaction do
         calculate_total(order)
@@ -24,7 +26,15 @@ module OrderService
         book = item.book
         raise ActiveRecord::RecordNotFound, "Book not found" unless book
 
+        if book.stock < item.quantity
+          raise BusinessError, "Insufficient stock for #{book.title}"
+        end
+
         item.unit_price = book.price
+
+        book.stock -= item.quantity
+        book.save!
+
         total += item.quantity * item.unit_price
       end
 

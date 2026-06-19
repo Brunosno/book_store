@@ -1,8 +1,8 @@
 module Api
   module V1
     class AuthorsController < ApiController
-      skip_before_action :authenticate_request, only: [:index, :show]
-      before_action :authorize_admin!, only: [:create, :update, :destroy]
+      skip_before_action :authenticate_request, only: [:index]
+      before_action :authorize_admin!, only: [:show, :update, :destroy]
 
       def index
         per_page = [params[:per_page].to_i, 50].min

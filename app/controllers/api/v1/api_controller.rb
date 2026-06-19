@@ -6,6 +6,7 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
       rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
+      rescue_from ::BusinessError, with: :business_error
 
       protected
 
@@ -47,6 +48,13 @@ module Api
         render_error(
           message: exception.message,
           status: :bad_request
+        )
+      end
+
+      def business_error(exception)
+        render_error(
+          message: exception.message,
+          status: :unprocessable_entity
         )
       end
     end
